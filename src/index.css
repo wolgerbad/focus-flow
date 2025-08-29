@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+
+#root {
+  background: #f9fafb;
+}
+
+.btn {
+  padding: 0.2rem 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: white;
+  background-color: rgb(37, 37, 249);
+  /* border: 1px solid rgb(167, 164, 164); */
+}
+
+.btn-secondary {
+  color: black;
+  background-color: white;
+  /* border: 1px solid rgb(82, 82, 82); */
+}

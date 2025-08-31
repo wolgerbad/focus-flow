@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Button from './Button';
 
-const START_TIME = 60 * 25;
+const START_TIME = 25 * 60;
 
-function PomodoroTimer() {
+function PomodoroTimer({ setPomodoroCount }) {
   const [time, setTime] = useState(START_TIME);
   const [isTimeRunning, setIsTimeRunning] = useState(false);
   const min = Math.floor(time / 60);
@@ -22,6 +22,10 @@ function PomodoroTimer() {
     function () {
       const pomodoroTimer = setTimeout(function () {
         if (isTimeRunning) setTime((t) => t - 1);
+        if (time === 0) {
+          setPomodoroCount((count) => count + 1);
+          handleReset();
+        }
       }, 1000);
 
       return () => clearTimeout(pomodoroTimer);

@@ -8,15 +8,27 @@ import './index.css';
 
 function App() {
   const [todos, setTodos] = useState(() => {
-    const localTodo = JSON.parse(localStorage.getItem('todo'));
-    if (!localTodo) return [];
-    return localTodo;
+    const savedTodos = localStorage.getItem('todo');
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    } else {
+      return [];
+    }
   });
-  // console.log(todos.length);
+
+  const [pomodoroCount, setPomodoroCount] = useState(() => {
+    const savedCount = localStorage.getItem('pomodoroCount');
+    if (savedCount) {
+      return JSON.parse(savedCount);
+    } else {
+      return 0;
+    }
+  });
 
   function handleSubmit(formData) {
     const todoValue = formData.get('todo');
-    setTodos((prev) => [...prev, todoValue]);
+    if (!todoValue) return null;
+    setTodos((prev) => [...prev, { todo: todoValue, isCompleted: false }]);
     // localStorage.setItem('todo', JSON.stringify([...todos, todoValue]));
   }
 
@@ -31,15 +43,22 @@ function App() {
     [todos]
   );
 
+  useEffect(
+    function () {
+      localStorage.setItem('pomodoroCount', JSON.stringify(pomodoroCount));
+    },
+    [pomodoroCount]
+  );
+
   return (
     <div className="w-[40rem] bg-gray-100 m-auto px-12 py-4">
       <h1 className="text-3xl mb-2">FocusFlow</h1>
       <AddTask onSubmit={handleSubmit} />
       <div className="grid grid-cols-2 gap-4 w-full mx-auto mt-4">
-        <TaskList todos={todos} onDelete={handleDelete} />
+        <TaskList todos={todos} setTodos={setTodos} onDelete={handleDelete} />
         <Notes />
-        <PomodoroTimer />
-        <DailyStats />
+        <PomodoroTimer setPomodoroCount={setPomodoroCount} />
+        <DailyStats todos={todos} pomodoroCount={pomodoroCount} />
       </div>
     </div>
   );
